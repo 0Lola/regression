@@ -11,6 +11,7 @@ import * as Highcharts from 'highcharts';
 })
 export class AppComponent {
 
+
     T: Array<Dataset> = [];
     private orignalChartT: Array<Array<any>> = [[]];
     private nonLinearModel: Array<Array<any>> = [[]];
@@ -24,7 +25,7 @@ export class AppComponent {
 
     // step 1 : load the hm1_data.csv
     private readCSV() {
-        this.http.get('/assets/hw1_data.csv', { responseType: 'text' })
+        this.http.get('https://zxa011023.github.io/regression/assets/hw1_data.csv', { responseType: 'text' })
             .subscribe(
                 data => this.parseData(data),
                 error => {
@@ -63,7 +64,7 @@ export class AppComponent {
             .map(e => e.transformX)
             .reduce((pre, cur) => pre + cur, 0) / this.T.length;
 
-        // b 
+        // b
         this.b =
             this.T
                 .map(e => (e.transformY - mean_Y) * (e.transformX - mean_X))
@@ -71,8 +72,8 @@ export class AppComponent {
             this.T.map(e => Math.pow((e.transformX - mean_X), 2))
                 .reduce((pre, cur) => pre + cur, 0);
 
-        // a -> log a
-        this.a = Math.pow(10, mean_Y - this.b * mean_X);
+        // a -> ln a
+        this.a = Math.pow(Math.E, mean_Y - this.b * mean_X);
 
         this.generateNonLinearModel();
     }
